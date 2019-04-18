@@ -2,6 +2,8 @@ import RPi.GPIO as GPIO
 import time
 import serial
 
+from TR50 import TR50http
+
 class WMbus(object):
 
     def __init__(self, serial_port='/dev/ttyS0'):
@@ -74,9 +76,30 @@ class WMbus(object):
         else:
             return (-1, rcv)
 
+
+
 if __name__ == '__main__':
+
     wmbus169 = WMbus()
     print(wmbus169.COMMAND_MODE())
     print(wmbus169.ATV())
+
+    dwConfig = {
+        'endpoint': 'http://api-de.devicewise.com/api',
+        'app_id': '0000001',
+        # it has to be locked ID value for each logic device. (generating from serial numbers?)
+        'app_token': 'hzFldHm60s4vaYzW',
+        'thing_key': 'wmbus169_gateway_100'
+    }
+
+    tr50http = TR50http.TR50http(dwConfig)
+
+    while 1:
+        atv = wmbus169.ATV()
+        result = tr50http.execute('log.publish', {'msg': atv[1]})
+        print(tr50http.get_response())
+        time.sleep(30)
+
+
 
 
