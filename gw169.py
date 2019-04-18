@@ -67,16 +67,16 @@ class WMbus(object):
         else:
             return (-1, rcv)
 
-        def ATV(self):
-            rcv = self.__send_atc(b'AT/V', end=b'\r')
-            if rcv.find(b'OK') != -1:
-                return (1, rcv)
-            else:
-                return (-1, rcv)
+    def ATV(self):
+        rcv = self.__send_atc(b'AT/V', end=b'\r')
+        if rcv.find(b'OK') != -1:
+            return (1, rcv)
+        else:
+            return (-1, rcv)
 
-        if __name__ == '__main__':
-            wmbus169 = WMbus()
-            print(wmbus169.COMMAND_MODE())
-            print(wmbus169.ATV())
+if __name__ == '__main__':
+    wmbus169 = WMbus()
+    print(wmbus169.COMMAND_MODE())
+    print(wmbus169.ATV())
 
 
